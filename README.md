@@ -31,6 +31,9 @@ El objetivo de esta práctica es desarrollar una aplicación cliente-servidor im
 
 Para realizar la práctica he creado un cliente donde tendrá un manejador de argumentos con yargs donde tendremos las opciones `list`, `add`, `remove`, `read`, `update`. Donde cada uno tendrá sus argumentos. Dentro de ellos se envia al servidor un JSON con el tipo de comando y los argumentos de comando. Eso lo recibe el servidor que controla que tipo de comando se le esta demandando, y deendiendo del comando se llaman a distintas funciones que realizaran las distintas acciones. Después de la llamada a las funciones se le enviará al cliente la respuesta con un tipo, éxito si ha pasado las funciones correctamente y error si ha habido un error durante el procesamiento. Y cuando lo recibe el cliente dependiendo de si es error o exito se imprimirá el contendido enviado desde el servidor con el color rojo o verde.
 
+Ejemplos de uso : `$node dist/client.js add --user "danixps" --id 1 --name "Black Lotus" --manaCost 20000 -- color "blanco" --type "criatura" --rarity "rara" --rulesText "Add three mana of any one color ." --marketValue 10000 --powerandtoughness "N/A" --loyalty "N/A"`
+New card saved at danixps collection!
+
 ## 3. Bibliografía
 
 [Guión de la Práctica 10](https://ull-esit-inf-dsi-2324.github.io/prct10-fs-proc-sockets-magic-app/)
