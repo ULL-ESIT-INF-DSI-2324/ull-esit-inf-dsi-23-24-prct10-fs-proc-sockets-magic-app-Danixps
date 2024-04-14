@@ -140,9 +140,7 @@ yargs(process.argv.slice(2))
                 argv.powerandtoughness,
                 argv.loyalty
             );
-            if (carta.gestionarerrores() === true) {
-                carta.modificarCarta(argv.user);
-            }
+            client.write(JSON.stringify({ command: 'update', user: argv.user, carta : carta }) + '\n');
         },
     })
     .command({

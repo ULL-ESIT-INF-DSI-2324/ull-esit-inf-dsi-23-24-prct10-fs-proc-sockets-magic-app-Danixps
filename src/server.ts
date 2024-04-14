@@ -46,7 +46,7 @@ net
       } else if (message.command === "list") {
         console.log(`Listing cards from ${message.user} collection...`);
         const contenido = mostrarCartas(message.user);
-        connection.write(JSON.stringify({ type: "respuesta", content: contenido }) + "\n");
+        connection.write(JSON.stringify({ type: "exito", content: contenido }) + "\n");
         connection.end();
       } else if (message.command === "read") {
         console.log(`Reading card from ${message.user} collection...`);
@@ -54,7 +54,7 @@ net
         if (contenido === `Card not found at ${message.user} collection!`) {
           connection.write(JSON.stringify({ type: "error", content: contenido }) + "\n");
         } else {
-          connection.write(JSON.stringify({ type: "respuesta", content: contenido }) + "\n");
+          connection.write(JSON.stringify({ type: "exito", content: contenido }) + "\n");
         }
         connection.end();
       } else if (message.command === "remove") {
@@ -78,6 +78,28 @@ net
           connection.write(JSON.stringify({ type: "exito", content: contenido }) + "\n");
       }
       connection.end();
+      }
+      else if (message.command === "update") {
+        console.log(`Updating card from ${message.user} collection...`);
+        const card = new Card(
+          message.carta.id,
+          message.carta.name,
+          message.carta.manaCost,
+          message.carta.color,
+          message.carta.type,
+          message.carta.rarity,
+          message.carta.rulesText,
+          message.carta.marketValue,
+          message.carta.powerandtoughness,
+          message.carta.loyalty
+        );
+        const contenido = card.modificarCarta(message.user);
+        if (contenido === `Card not found at ${message.user} collection`) {
+          connection.write(JSON.stringify({ type: "error", content: contenido }) + "\n");
+        } else {
+          connection.write(JSON.stringify({ type: "exito", content: contenido }) + "\n");
+        }
+        connection.end();
       }
   });
         
