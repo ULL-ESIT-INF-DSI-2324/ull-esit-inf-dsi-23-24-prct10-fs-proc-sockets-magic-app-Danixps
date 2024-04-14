@@ -110,6 +110,7 @@ export class Card implements Card_Characteristics {
             console.error(chalk.red(`Invalid type: ${this.type}, change it to one of the following: ${Object.values(LineType)} for creating a card`));
             return `Invalid type: ${this.type}, change it to one of the following: ${Object.values(LineType)} for creating a card`;
         }
+        
         if (this.powerandtoughness && this.type !== LineType.Criatura) {
             console.error(chalk.red(`Power/Toughness is only for criatura cards`));
             return `Power/Toughness is only for criatura cards`;
