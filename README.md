@@ -11,6 +11,7 @@
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=ULL-ESIT-INF-DSI-2324_ull-esit-inf-dsi-23-24-prct10-fs-proc-sockets-magic-app-Danixps&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=ULL-ESIT-INF-DSI-2324_ull-esit-inf-dsi-23-24-prct10-fs-proc-sockets-magic-app-Danixps)
 
 
+
 Ejemplos de uso $node dist/client.js add --user "danixps" --id 1 --name "Black Lotus" --manaCost 20000 --
 color "blanco" --type "criatura" --rarity "rara" --rulesText "Add three mana of any one color
 ." --marketValue 10000 --powerandtoughness "N/A" --loyalty "N/A"
