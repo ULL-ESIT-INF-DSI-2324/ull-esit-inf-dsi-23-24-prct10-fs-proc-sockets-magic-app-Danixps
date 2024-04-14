@@ -32,6 +32,7 @@ describe('MessageEventEmitterClient', () => {
       expect(message).to.be.eql({ 'command': 'add ', 'user': 'danixps', 'id': 1, 'name': 'carta1', 'manaCost': 1, 'color': 'rojo', 'type': 'criatura', 'rarity': 'comun', 'rulesText': 'carta1', 'marketValue': 1, 'powerandtoughness': '1/1', 'loyalty': 1 });
       done();
     });
+    
 
     socket.emit('data', '{"command": "add "');
     socket.emit('data', ', "user": "danixps", "id": 1, "name": "carta1", "manaCost": 1, "color": "rojo", "type": "criatura", "rarity": "comun", "rulesText": "carta1", "marketValue": 1, "powerandtoughness": "1/1", "loyalty": 1}');
