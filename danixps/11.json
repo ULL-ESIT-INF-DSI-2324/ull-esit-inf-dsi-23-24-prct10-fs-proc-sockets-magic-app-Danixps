@@ -1,0 +1,10 @@
+{
+  "id": 11,
+  "name": "Black Lotus",
+  "manaCost": 10000,
+  "color": "blanco",
+  "type": "criatura",
+  "rarity": "rara",
+  "rulesText": "pba",
+  "marketValue": 11
+}

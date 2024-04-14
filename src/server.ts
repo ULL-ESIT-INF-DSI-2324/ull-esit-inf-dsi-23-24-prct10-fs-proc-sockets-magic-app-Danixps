@@ -1,5 +1,7 @@
 import net from "net";
 import { exec, spawn } from "child_process";
+import { cargarCartas, encontrarCarta, mostrarCartas} from "./gestioncartas.js";
+import { Card } from "./card.js";
 
 /**
  * Descripcion: creamos el servidor
@@ -9,7 +11,7 @@ net
   .createServer((connection) => {
     console.log("A client has connected.");
 
-    connection.write(JSON.stringify({ type: "connection" }) + "\n");
+
 
 
     /**
@@ -18,65 +20,72 @@ net
     connection.on("data", (dataJSON) => {
       const message = JSON.parse(dataJSON.toString());
 
-      if (message.type === "command") {
-        
-        console.log(`Received command: ${message.content}`);
-        const commands = message.content.split(" ");
-        const file = commands[0];
-        const option = message.option;
-        console.log(`File: ${file}`);
-        console.log(`Option: ${option}`);
+      if (message.command === "add") {
+        console.log(`Adding card to ${message.user} collection...`);
+        const card = new Card(
+          message.id,
+          message.name,
+          message.manaCost,
+          message.color,
+          message.type,
+          message.rarity,
+          message.rulesText,
+          message.marketValue,
+          message.powerandtoughness,
+          message.loyalty  
+        );
 
-        const exe = spawn('wc', [file]);
-
-        let commandOutput = "";
-        let Output = "";
-
-
-        exe.stdout.on("data", (piece) => {
-          commandOutput += piece;
-          if(message.option === 'line') {
-             Output = commandOutput.split(' ')[1];
-          } else if(message.option === 'word'){
-            Output = commandOutput.split(' ')[3];
-          }
-
-          else if(message.option === 'character'){
-            Output = commandOutput.split(' ')[4];
-          } else{
-            Output = 'Opcion inválida. Escoja (line, caracter o word)';
-          }
-        });
-        
-        /**
-          * Descripcion: se cierra el ejecutador y finaliza el proceso
-          */
-        exe.on("close", (code) => {
-          console.log(`Child process exited with codee ${code}`);
-          if(code === 1) {
-            connection.write( JSON.stringify({ type: "error_file", content: Output }) + "\n");
-          
-          } else {
-            connection.write( JSON.stringify({ type: "respuesta", content: Output }) + "\n");
-            connection.end();
-          }
-          connection.end();
-        });
-      } else if (message.type === "respuesta") {
-        console.log(`Salida:\n${message.content}`);
-      } else {
-        console.log(`Message type ${message.type} is not valid`);
+        console.log(card);
+        const contenido = card.guardarCarta(message.user);
+        if (contenido === `New card saved at ${message.user} collection!`) {
+          connection.write(JSON.stringify({ type: "exito", content: contenido }) + "\n");
+        } else {
+          connection.write(JSON.stringify({ type: "error", content: contenido }) + "\n");
+        }
+        connection.end();
+      } else if (message.command === "list") {
+        console.log(`Listing cards from ${message.user} collection...`);
+        const contenido = mostrarCartas(message.user);
+        connection.write(JSON.stringify({ type: "respuesta", content: contenido }) + "\n");
+        connection.end();
+      } else if (message.command === "read") {
+        console.log(`Reading card from ${message.user} collection...`);
+        const contenido = encontrarCarta(message.user, message.id);
+        if (contenido === `Card not found at ${message.user} collection!`) {
+          connection.write(JSON.stringify({ type: "error", content: contenido }) + "\n");
+        } else {
+          connection.write(JSON.stringify({ type: "respuesta", content: contenido }) + "\n");
+        }
+        connection.end();
+      } else if (message.command === "remove") {
+        console.log(`Removing card from ${message.user} collection...`);
+        const card = new Card(
+          message.id,
+          message.name,
+          message.manaCost,
+          message.color,
+          message.type,
+          message.rarity,
+          message.rulesText,
+          message.marketValue,
+          message.powerandtoughness,
+          message.loyalty  
+        );
+        const contenido = card.eliminarcarta(message.user);
+        if (contenido === `Card id ${message.id} not found at ${message.user} collection`) {
+          connection.write(JSON.stringify({ type: "error", content: contenido }) + "\n");
+        } else {
+          connection.write(JSON.stringify({ type: "exito", content: contenido }) + "\n");
       }
-    });
-
-
-    process.stdin.on("data", (data) => {
-      const input = data.toString().trim();
-      connection.write(JSON.stringify({ type: "command", content: input }) + "\n");
-    });
-
-
-  })
-  .listen(60300, () => {
-    console.log("Waiting for clients to connect.");
+      connection.end();
+      }
   });
+        
+      connection.on("end", () => {
+        console.log("Client has disconnected.");
+      });
+
+    })
+    .listen(60300, () => {
+      console.log("Waiting for clients to connect.");
+    });

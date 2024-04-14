@@ -10,15 +10,14 @@ describe('MessageEventEmitterClient', () => {
     const client = new MessageEventEmitterClient(socket);
 
     client.on('message', (message) => {
-      expect(message).to.be.eql({ 'type': 'command', 'content': 'ls' });
-      expect(message).to.be.eql({ 'type': message.type, 'content': message.content });
-      expect(message.type).to.be.equal('command');
-      expect(message.content).to.be.equal('ls');
+      expect(message).to.be.eql({ 'command': 'list', 'user': 'danixps' });
+      expect(message).to.be.eql({ 'command': message.command, 'user': message.user });
+      expect(message.command).to.be.equal('list');
       done();
     });
 
-    socket.emit('data', '{"type": "command" ');
-    socket.emit('data', ', "content": "ls"}');
+    socket.emit('data', '{"command": "list" ');
+    socket.emit('data', ', "user": "danixps"}');
     socket.emit('data', '\n');
   });
 });
@@ -30,15 +29,12 @@ describe('MessageEventEmitterClient', () => {
     const client = new MessageEventEmitterClient(socket);
 
     client.on('message', (message) => {
-      expect(message).to.be.eql({ 'type': 'respuesta', 'content': 'ls -la' }); 
-      expect(message).to.be.eql({ 'type': message.type, 'content': message.content });
-      expect(message.type).to.be.equal('respuesta');
-      expect(message.content).to.be.equal('ls -la');
+      expect(message).to.be.eql({ 'command': 'add ', 'user': 'danixps', 'id': 1, 'name': 'carta1', 'manaCost': 1, 'color': 'rojo', 'type': 'criatura', 'rarity': 'comun', 'rulesText': 'carta1', 'marketValue': 1, 'powerandtoughness': '1/1', 'loyalty': 1 });
       done();
     });
 
-    socket.emit('data', '{"type": "respuesta" ');
-    socket.emit('data', ', "content": "ls -la"}');
+    socket.emit('data', '{"command": "add "');
+    socket.emit('data', ', "user": "danixps", "id": 1, "name": "carta1", "manaCost": 1, "color": "rojo", "type": "criatura", "rarity": "comun", "rulesText": "carta1", "marketValue": 1, "powerandtoughness": "1/1", "loyalty": 1}');
     socket.emit('data', '\n');
   });
 });
